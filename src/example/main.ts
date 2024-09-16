@@ -20,7 +20,6 @@ function createApp() {
   function updateApp(count: number) {
     const newVApp = createVApp(count);
     const patches = diff(vApp, newVApp);
-    console.log(patches)
     rootNode = patch(rootNode, patches) as HTMLElement;
     vApp = newVApp;
   }

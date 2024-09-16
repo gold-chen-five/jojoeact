@@ -41,7 +41,11 @@ export function diff(oldVNode: VNode, newVNode: VNode): Patch | null {
   const childPatches: (Patch | null)[] = [];
   const additionalPatches: { type: "ADD"; newVNode: VNode }[] = [];
   oldVNode.children.forEach((oldChild, i) => {
-    if (typeof oldChild !== "string" && typeof newVNode.children[i] !== "string") {
+    if (typeof oldChild === "string" && typeof newVNode.children[i] === "string") {
+      if (oldChild !== newVNode.children[i]) {
+        childPatches.push({ type: "TEXT",  newVNode: { type: "TEXT_ELEMENT", props: { nodeValue: newVNode.children[i] }, children: [] } as VNode  });
+      }
+    } else if (typeof oldChild !== "string" && typeof newVNode.children[i] !== "string") {
       childPatches.push(diff(oldChild, newVNode.children[i] as VNode));
     }
   });
