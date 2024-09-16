@@ -2,25 +2,38 @@
 import { VNode } from './vdom';
 
 export function render(vnode: VNode | string, container: HTMLElement): Node {
-  if (typeof vnode === "string") {
+  if (typeof vnode === 'string') {
+    // Handle text nodes
     const textNode = document.createTextNode(vnode);
     container.appendChild(textNode);
     return textNode;
   }
 
-  const domElement = document.createElement(vnode.type as string);
+  if (typeof vnode.type === 'string') {
+    // Handle HTML elements
+    const domElement = document.createElement(vnode.type);
 
-  Object.entries(vnode.props).forEach(([prop, value]) => {
-    if (prop !== "children") {
-      (domElement as any)[prop] = value;
-    }
-  });
+    // Set properties
+    Object.entries(vnode.props).forEach(([key, value]) => {
+      if (key !== 'children') {
+        domElement.setAttribute(key, value);
+      }
+    });
 
-  vnode.children.forEach(child => {
-    const childNode = render(child, domElement);
-    domElement.appendChild(childNode);
-  });
+    // Render children
+    vnode.children.forEach(child => {
+      const childNode = render(child, domElement);
+      domElement.appendChild(childNode);
+    });
 
-  container.appendChild(domElement);
-  return domElement;
+    container.appendChild(domElement);
+    return domElement;
+  } else if (typeof vnode.type === 'function') {
+    // Handle custom components
+    const component = vnode.type;
+    const childVNode = component(vnode.props);
+    return render(childVNode, container);
+  }
+
+  throw new Error(`Invalid VNode type: ${typeof vnode.type}`);
 }
