@@ -1,10 +1,10 @@
 // src/core/render.ts
 import { VNode } from './vdom';
 
-export function render(vnode: VNode | string, container: HTMLElement): Node {
-  if (typeof vnode === 'string') {
+export function render(vnode: VNode | string | number, container: HTMLElement): Node {
+  if (typeof vnode === 'string' || typeof vnode === 'number') {
     // Handle text nodes
-    const textNode = document.createTextNode(vnode);
+    const textNode = document.createTextNode(vnode.toString());
     container.appendChild(textNode);
     return textNode;
   }

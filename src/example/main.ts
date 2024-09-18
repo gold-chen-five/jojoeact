@@ -9,7 +9,7 @@ function createApp() {
   );
 
   let vApp = createVApp(0);
-  const container = document.getElementById("app");
+  const container = document.getElementById("jojo");
 
   if (!container) {
     throw new Error("Container element not found");

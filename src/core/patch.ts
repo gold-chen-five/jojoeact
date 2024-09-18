@@ -22,6 +22,7 @@ export function patch(dom: Node, patchObj: Patch | null): Node {
         (dom as Element).removeAttribute(key);
       } else {
         if (key.startsWith("on") && typeof value === "function") {
+          console.log(key);
           (dom as HTMLElement & { [key: string]: any })[key] = value; // 設置為事件處理
         } else {
           (dom as Element).setAttribute(key, value);

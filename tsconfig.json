@@ -8,7 +8,7 @@
 
     /* tsx, jsx*/
     "jsx": "react",
-    "jsxFactory": "createElement",
+    "jsxFactory": "createElement", // jsx will transfer it to my createElement function
     "jsxFragmentFactory": "Fragment",
 
     /* Bundler mode */

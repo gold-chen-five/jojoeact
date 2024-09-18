@@ -26,6 +26,7 @@ export function diff(oldVNode: VNode, newVNode: VNode): Patch | null {
 
    // 比較屬性的變化
   const propPatches: { [key: string]: any } = {};
+  console.log(newVNode);
   for (const [key, value] of Object.entries(newVNode.props)) {
     if (value !== oldVNode.props[key]) {
       propPatches[key] = value;
@@ -41,13 +42,22 @@ export function diff(oldVNode: VNode, newVNode: VNode): Patch | null {
   const childPatches: (Patch | null)[] = [];
   const additionalPatches: { type: "ADD"; newVNode: VNode }[] = [];
   oldVNode.children.forEach((oldChild, i) => {
-    if (typeof oldChild === "string" && typeof newVNode.children[i] === "string") {
+    if (
+      (typeof oldChild === "string" && typeof newVNode.children[i] === "string") ||
+      (typeof oldChild === "number" && typeof newVNode.children[i] === "number")
+    ) {
       if (oldChild !== newVNode.children[i]) {
-        childPatches.push({ type: "TEXT",  newVNode: { type: "TEXT_ELEMENT", props: { nodeValue: newVNode.children[i] }, children: [] } as VNode  });
+        childPatches.push({ type: "TEXT",  newVNode: { type: "TEXT_ELEMENT", props: { nodeValue: newVNode.children[i].toString() }, children: [] } as VNode  });
       }
-    } else if (typeof oldChild !== "string" && typeof newVNode.children[i] !== "string") {
-      childPatches.push(diff(oldChild, newVNode.children[i] as VNode));
     }
+    
+    if (
+      (typeof oldChild !== "string" && typeof newVNode.children[i] !== "string") ||
+      (typeof oldChild !== "number" && typeof newVNode.children[i] !== "number")
+    ) {
+      childPatches.push(diff(oldChild as VNode, newVNode.children[i] as VNode));
+    }
+
   });
   for (let i = oldVNode.children.length; i < newVNode.children.length; i++) {
     additionalPatches.push({ type: "ADD", newVNode: newVNode.children[i] as VNode });

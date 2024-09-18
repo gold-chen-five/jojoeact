@@ -1,5 +1,4 @@
 // src/core/vdom.ts
-
 export type VNodeType = string | Function;
 
 export interface VNode {
@@ -8,8 +7,8 @@ export interface VNode {
   children: (VNode | string)[];
 }
 
-export function createElement(type: VNodeType, props: { [key: string]: any } | null, ...children: (VNode | string)[]): VNode {
-  return { type, props: props || {}, children: children || [] };
+export function createElement(type: VNodeType, props: { [key: string]: any } | null = null, ...children: (VNode | string)[]): VNode {
+  return { type, props: props || {}, children: children || [] }
 }
 
 export function createTextElement(text: string): VNode {
