@@ -1,5 +1,6 @@
 // src/App.tsx
 import { createElement, render, diff, patch, VNode } from '../index';
+import { Test } from './Test';
 
 // Define a basic state management approach
 let count = 0;
@@ -16,14 +17,12 @@ const App = () => {
     updateCount(count + 1); // Increment count
   }
 
-  const a = 123456;
   return (
     <div className="my-component">
-      <h1>{a}</h1>
-      <p>{count + 2}</p>
+      <h1>main</h1>
       <button onclick={handleClick}>Test</button>
       <p>
-        <div>test</div>
+        <Test count={count}/>
         <div>Count: {count}</div>
       </p>
     </div>
@@ -44,7 +43,7 @@ function renderApp() {
 }
 
 function updateApp(){
-  const newVApp = App();
+  const newVApp = <App />;
   const patches = diff(vApp, newVApp);
   rootNode = patch(rootNode, patches) as HTMLElement;
   vApp = newVApp;

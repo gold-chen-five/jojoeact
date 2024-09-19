@@ -4,10 +4,17 @@ export type VNodeType = string | Function;
 export interface VNode {
   type: VNodeType;
   props: { [key: string]: any };
-  children: (VNode | string)[];
+  children: (VNode | string | number)[];
 }
 
-export function createElement(type: VNodeType, props: { [key: string]: any } | null = null, ...children: (VNode | string)[]): VNode {
+export function createElement(
+  type: VNodeType, 
+  props: { [key: string]: any } | null = null, 
+  ...children: (VNode | string)[]
+): VNode {
+  if (typeof type === 'function') {
+    return type(props); // Call the function to get the VNode
+  }
   return { type, props: props || {}, children: children || [] }
 }
 
