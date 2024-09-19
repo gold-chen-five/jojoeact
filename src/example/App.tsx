@@ -6,7 +6,8 @@ let count = 0;
 
 function updateCount(newCount: number) {
   count = newCount;
-  renderApp();
+  //renderApp();
+  updateApp();
 }
 
 const App = () => {
@@ -40,8 +41,9 @@ function renderApp() {
 
 function updateApp(){
   const newVApp = App();
-  console.log(newVApp)
+ 
   const patches = diff(vApp, newVApp);
+  
   rootNode = patch(rootNode, patches) as HTMLElement;
   vApp = newVApp;
 }

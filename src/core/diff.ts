@@ -1,15 +1,18 @@
 // src/core/diff.ts
 import type { VNode } from './vdom';
 
+export type ReplacePatch = { type: "REPLACE"; newVNode: VNode };
+export type TextPatch = { type: "TEXT"; newVNode: VNode };
+export type PatchPatch = { 
+  type: "PATCH"; 
+  propPatches: { [key: string]: any }; 
+  childPatches: (Patch | null)[];
+  additionalPatches: { type: "ADD"; newVNode: VNode }[];
+};
 export type Patch = 
-  | { type: "REPLACE"; newVNode: VNode }
-  | { type: "TEXT"; newVNode: VNode }
-  | { 
-      type: "PATCH"; 
-      propPatches: { [key: string]: any }; 
-      childPatches: (Patch | null)[];
-      additionalPatches: { type: "ADD"; newVNode: VNode }[];
-    };
+  | ReplacePatch
+  | TextPatch
+  | PatchPatch
 
 export function diff(oldVNode: VNode, newVNode: VNode): Patch | null {
    // 如果節點類型不同，直接替換
@@ -26,7 +29,6 @@ export function diff(oldVNode: VNode, newVNode: VNode): Patch | null {
 
    // 比較屬性的變化
   const propPatches: { [key: string]: any } = {};
-  console.log(newVNode);
   for (const [key, value] of Object.entries(newVNode.props)) {
     if (value !== oldVNode.props[key]) {
       propPatches[key] = value;
@@ -49,16 +51,11 @@ export function diff(oldVNode: VNode, newVNode: VNode): Patch | null {
       if (oldChild !== newVNode.children[i]) {
         childPatches.push({ type: "TEXT",  newVNode: { type: "TEXT_ELEMENT", props: { nodeValue: newVNode.children[i].toString() }, children: [] } as VNode  });
       }
-    }
-    
-    if (
-      (typeof oldChild !== "string" && typeof newVNode.children[i] !== "string") ||
-      (typeof oldChild !== "number" && typeof newVNode.children[i] !== "number")
-    ) {
+    } else {
       childPatches.push(diff(oldChild as VNode, newVNode.children[i] as VNode));
     }
-
   });
+
   for (let i = oldVNode.children.length; i < newVNode.children.length; i++) {
     additionalPatches.push({ type: "ADD", newVNode: newVNode.children[i] as VNode });
   }
