@@ -37,7 +37,7 @@ function renderApp() {
   const app = document.getElementById('jojo');
   if (app) {
     app.innerHTML = ''; // Clear previous content
-    vApp = App();
+    vApp = <App />;
     rootNode = render(vApp, app); // Render the updated component
   }
 }
