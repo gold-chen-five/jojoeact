@@ -16,12 +16,16 @@ const App = () => {
     updateCount(count + 1); // Increment count
   }
 
+  const a = 123456;
   return (
     <div className="my-component">
-      <h1>Hello, World!</h1>
-      <p>This is a paragraph.</p>
+      <h1>{a}</h1>
+      <p>{count + 2}</p>
       <button onclick={handleClick}>Test</button>
-      <p>Count: {count}</p>
+      <p>
+        <div>test</div>
+        <div>Count: {count}</div>
+      </p>
     </div>
   );
 };
@@ -41,9 +45,7 @@ function renderApp() {
 
 function updateApp(){
   const newVApp = App();
- 
   const patches = diff(vApp, newVApp);
-  
   rootNode = patch(rootNode, patches) as HTMLElement;
   vApp = newVApp;
 }

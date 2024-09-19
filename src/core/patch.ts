@@ -4,7 +4,6 @@ import { Patch, ReplacePatch, TextPatch, PatchPatch } from './diff';
 
 export function patch(dom: Node, patchObj: Patch | null): Node {
   if (!patchObj) return dom;
-  console.log(patchObj)
   switch (patchObj.type) {
     case "REPLACE":
       return replaceNode(dom, patchObj);

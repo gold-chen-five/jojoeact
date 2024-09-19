@@ -49,8 +49,18 @@ export function diff(oldVNode: VNode, newVNode: VNode): Patch | null {
       (typeof oldChild === "number" && typeof newVNode.children[i] === "number")
     ) {
       if (oldChild !== newVNode.children[i]) {
-        childPatches.push({ type: "TEXT",  newVNode: { type: "TEXT_ELEMENT", props: { nodeValue: newVNode.children[i].toString() }, children: [] } as VNode  });
+        childPatches.push({ 
+          type: "TEXT",  
+          newVNode: { 
+            type: "TEXT_ELEMENT", 
+            props: { nodeValue: newVNode.children[i].toString() }, 
+            children: [] 
+          } as VNode  
+        });
+      } else {
+        childPatches.push(null);
       }
+      //childPatches.push({ type: "TEXT",  newVNode: { type: "TEXT_ELEMENT", props: { nodeValue: newVNode.children[i].toString() }, children: [] } as VNode  });
     } else {
       childPatches.push(diff(oldChild as VNode, newVNode.children[i] as VNode));
     }
