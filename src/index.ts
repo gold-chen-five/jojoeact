@@ -6,4 +6,5 @@ export { diff } from './core/diff';
 export  type { Patch } from './core/diff';
 export { patch } from './core/patch';
 export { createRoot } from './core/dom';
-export { currentRoot } from './shared/dom-state'
+export { currentRoot } from './shared/dom-state';
+export { useState } from './hooks/useState'

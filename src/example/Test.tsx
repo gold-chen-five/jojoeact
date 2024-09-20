@@ -1,3 +1,4 @@
+// example/Test.tsx
 import { createElement } from "../index"
 
 interface TestProps {
@@ -5,7 +6,11 @@ interface TestProps {
 }
 
 export function Test({count}: TestProps){
+
+
     return (
-        <p>count: {count}</p>
+        <div>
+            <p>count: {count}</p>
+        </div>
     )
 }   

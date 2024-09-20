@@ -1,25 +1,28 @@
 // src/App.tsx
-import { createElement, createRoot, currentRoot } from '../index';
+import { createElement, createRoot, currentRoot, useState } from '../index';
 import { Test } from './Test';
-
-// Define a basic state management approach
-let count = 0;
-
-function updateCount(newCount: number) {
-  count = newCount;
-  currentRoot?.updateApp(<App />);
-}
-
+  // Define a basic state management approach
 const App = () => {
+  const [count, setCount] = useState<number>(0);
+
+
+  // function updateCount(newCount: number) {
+  //   count = newCount;
+  //   console.log(<App />);
+  //   currentRoot?.updateApp(<App />);
+  // }
+
+
   // Define a handler for the button click
   function handleClick() {
-    updateCount(count + 1); // Increment count
+    // Increment count
+    setCount(count + 1);
   }
 
   return (
     <div className="my-component">
       <h1>main</h1>
-      <button onclick={handleClick}>Test</button>
+      <button onClick={handleClick}>Test</button>
       <Test count={count}/>
     </div>
   );
@@ -27,4 +30,4 @@ const App = () => {
 
 const root = createRoot(document.getElementById('jojo'));
 root.renderApp(<App />);
-root.updateApp(<App />);
+//root.updateApp();
