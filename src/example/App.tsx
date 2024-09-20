@@ -1,5 +1,5 @@
 // src/App.tsx
-import { createElement, render, diff, patch, VNode } from '../index';
+import { createElement, createRoot, currentRoot } from '../index';
 import { Test } from './Test';
 
 // Define a basic state management approach
@@ -7,8 +7,7 @@ let count = 0;
 
 function updateCount(newCount: number) {
   count = newCount;
-  //renderApp();
-  updateApp();
+  currentRoot?.updateApp(<App />);
 }
 
 const App = () => {
@@ -21,34 +20,11 @@ const App = () => {
     <div className="my-component">
       <h1>main</h1>
       <button onclick={handleClick}>Test</button>
-      <p>
-        <Test count={count}/>
-        <div>Count: {count}</div>
-      </p>
+      <Test count={count}/>
     </div>
   );
 };
 
-let rootNode: Node;
-let vApp: VNode;
-
-// Render function to update the DOM
-function renderApp() {
-  const app = document.getElementById('jojo');
-  if (app) {
-    app.innerHTML = ''; // Clear previous content
-    vApp = <App />;
-    rootNode = render(vApp, app); // Render the updated component
-  }
-}
-
-function updateApp(){
-  const newVApp = <App />;
-  const patches = diff(vApp, newVApp);
-  rootNode = patch(rootNode, patches) as HTMLElement;
-  vApp = newVApp;
-}
-
-// Initial render
-renderApp();
-updateApp();
+const root = createRoot(document.getElementById('jojo'));
+root.renderApp(<App />);
+root.updateApp(<App />);

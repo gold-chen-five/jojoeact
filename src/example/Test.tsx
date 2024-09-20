@@ -6,6 +6,6 @@ interface TestProps {
 
 export function Test({count}: TestProps){
     return (
-        <div>{count}</div>
+        <p>count: {count}</p>
     )
-}
+}   
