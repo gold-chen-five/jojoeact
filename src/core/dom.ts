@@ -1,12 +1,13 @@
 //src/core/dom.ts
-import type {VNode } from "./vdom"
+import type { VNode } from "./vdom"
 import { render } from "./render";
 import { diff } from "./diff";
 import { patch } from "./patch";
+import { setCurrentRoot } from "../shared/dom-state";
 
 export interface Root {
     renderApp: (vApp: VNode) => void;
-    updateApp: () => void    
+    updateApp: (newVApp: VNode) => void    
 }
 
 export function createRoot(rootElement: HTMLElement | null): Root{
@@ -21,14 +22,14 @@ export function createRoot(rootElement: HTMLElement | null): Root{
             vApp = App;
             rootNode = render(App, rootElement);
         },
-        updateApp: () => {
-            const newVApp = vApp;
-            console.log(newVApp);
+        updateApp: (newVApp) => {
+            //const newVApp = vApp;
             const patches = diff(vApp, newVApp);
             rootNode = patch(rootNode, patches) as HTMLElement;
             vApp = newVApp;
         }
     };
     
+    setCurrentRoot(root);
     return root;
 }
