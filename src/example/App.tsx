@@ -11,9 +11,7 @@ const App = () => {
 
   function updateCount(newCount: number) {
     count = newCount;
-    console.log(App);
-    console.log(App());
-    currentRoot?.updateApp(<App />);
+    currentRoot?.updateApp();
   }
 
 
@@ -33,5 +31,4 @@ const App = () => {
 };
 
 const root = createRoot(document.getElementById('jojo'));
-root.renderApp(<App />);
-root.updateApp(<App />);
+root.renderApp(App);
