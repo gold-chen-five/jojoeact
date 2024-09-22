@@ -1,4 +1,4 @@
-//src/core/dom.ts
+// src/core/dom.ts
 import type { VNode } from "./vdom"
 import { render } from "./render";
 import { diff } from "./diff";

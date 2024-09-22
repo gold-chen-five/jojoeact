@@ -11,7 +11,6 @@ export function useState<T>(initialValue: T): [T, (newValue: T) => void] {
   function setState(newValue: T):void {
     if(newValue === states[currentIndex])  return;
     states[currentIndex] = newValue;
-    console.log(states[currentIndex])
     currentRoot?.updateApp(); // Trigger re-render on state change
   }
   return [states[currentIndex], setState];
