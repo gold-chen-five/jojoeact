@@ -7,7 +7,7 @@ const App = () => {
 
   // Define a handler for the button click
   function handleClick() {
-    setCount(count + 1);
+    setCount((prev) => prev+1);
   }
 
   return (
