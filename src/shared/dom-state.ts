@@ -1,17 +1,16 @@
 import type { Root } from "../core/dom";
 
 export let currentRoot: Root | null = null;
-export let states: any[] = [];
-export let stateIndex = 0;
-
 export function setCurrentRoot(root: Root | null) {
     currentRoot = root;
 }
 
-export function resetState() {
-    stateIndex = 0;
+// state controll of useState
+export let states: any[] = [];
+export let stateIndex: number = 0; 
+export function increaseStateIndex(): void {
+    stateIndex++;
 }
-
-export function addNewState():number {
-    return stateIndex++;
+export function resetStateIndex():void {
+    stateIndex = 0;
 }

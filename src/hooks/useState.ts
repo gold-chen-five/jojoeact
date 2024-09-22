@@ -1,12 +1,18 @@
 import { currentRoot } from "../shared/dom-state";
+import { increaseStateIndex, states, stateIndex } from "../shared/dom-state";
 
 export function useState<T>(initialValue: T): [T, (newValue: T) => void] {
-    let state = initialValue;
-
-  function setState(newValue: T) {
-    state = newValue;
-    currentRoot?.updateApp(); // Trigger re-render on state change
+  const currentIndex = stateIndex;
+  increaseStateIndex();
+  if (states[currentIndex] === undefined) {
+    states[currentIndex] = initialValue;
   }
 
-  return [state, setState];
+  function setState(newValue: T):void {
+    if(newValue === states[currentIndex])  return;
+    states[currentIndex] = newValue;
+    console.log(states[currentIndex])
+    currentRoot?.updateApp(); // Trigger re-render on state change
+  }
+  return [states[currentIndex], setState];
 }

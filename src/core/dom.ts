@@ -4,7 +4,7 @@ import { render } from "./render";
 import { diff } from "./diff";
 import { patch } from "./patch";
 import { setCurrentRoot } from "../shared/dom-state";
-import { createElement } from "./vdom";
+import { resetStateIndex } from "../shared/dom-state";
 
 export interface Root {
     renderApp: (vApp: any) => void;
@@ -30,6 +30,7 @@ export function createRoot(rootElement: HTMLElement | null): Root {
             root.updateApp();
         },
         updateApp: () => {
+            resetStateIndex();
             const newVApp = recreateVApp();
             const patches = diff(vApp, newVApp);
             rootNode = patch(rootNode, patches) as HTMLElement;

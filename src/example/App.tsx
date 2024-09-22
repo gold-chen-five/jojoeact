@@ -2,23 +2,23 @@
 import { createElement, createRoot, currentRoot, useState } from '../index';
 import { Test } from './Test';
 
-let count = 0;
+//let count = 0;
 
 // Define a basic state management approach
 const App = () => {
-  //const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState<number>(0);
 
 
-  function updateCount(newCount: number) {
-    count = newCount;
-    currentRoot?.updateApp();
-  }
+  // function updateCount(newCount: number) {
+  //   count = newCount;
+  //   currentRoot?.updateApp();
+  // }
 
 
   // Define a handler for the button click
   function handleClick() {
-    updateCount(count + 1);
-    console.log('test');
+    //updateCount(count + 1);
+    setCount(count + 1);
   }
 
   return (
