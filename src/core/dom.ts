@@ -27,6 +27,7 @@ export function createRoot(rootElement: HTMLElement | null): Root {
             }
             recreateVApp = App;  
             vApp = recreateVApp();
+            console.log(vApp);
             rootNode = render(vApp, rootElement);
             root.updateApp();
         },

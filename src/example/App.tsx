@@ -25,6 +25,7 @@ const App = () => {
   },[count, object]);
 
   const arr = [1,2,3,4];
+  
   return (
     <div className="my-component">
       <h1>main</h1>
@@ -33,11 +34,11 @@ const App = () => {
       <p>{object.test}</p>
       <Test count={count}/>
 
-      {/* {
+      {
         arr.map((v) => (
           <div>{v}</div>
         ))
-      } */}
+      }
       
     </div>
   );
@@ -45,3 +46,4 @@ const App = () => {
 
 const root = createRoot(document.getElementById('jojo'));
 root.renderApp(App);
+
