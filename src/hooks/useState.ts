@@ -1,5 +1,15 @@
 import { currentRoot } from "../shared/dom-state";
-import { increaseStateIndex, states, stateIndex } from "../shared/dom-state";
+
+let states: any[] = [];
+let stateIndex: number = 0;
+
+function increaseStateIndex(): void {
+  stateIndex++;
+}
+
+export function resetStateIndex():void {
+  stateIndex = 0;
+}
 
 export function useState<T>(initialValue: T): [T, (value: T | ((prevState: T) => T)) => void] {
   const currentIndex = stateIndex;

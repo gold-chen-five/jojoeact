@@ -4,8 +4,8 @@ import { render } from "./render";
 import { diff } from "./diff";
 import { patch } from "./patch";
 import { setCurrentRoot } from "../shared/dom-state";
-import { resetStateIndex } from "../shared/dom-state";
 import { resetEffectIndex } from "../hooks/useEffect";
+import { resetStateIndex } from "../hooks/useState";
 
 export interface Root {
     renderApp: (vApp: any) => void;
