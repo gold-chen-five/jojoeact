@@ -6,9 +6,13 @@ let effects: (void | (() => void))[] = [];
 let dependencies: Dependency[] = [];
 let effectIndex: number = 0;
 
+export function resetEffectIndex(){
+    effectIndex = 0;
+}
+
 /**
  * @description this is a hooks that simulate to the react useEffect
- * @param effect - run the effect when deps change
+ * @param effect - run the effect when deps change, you can return a cleanup function 
  * @param deps - useEffect will listen to the deps, when deps value change it run the effect function
  */
 export function useEffect(effect: EffectCallback, deps: any[]){
@@ -16,7 +20,7 @@ export function useEffect(effect: EffectCallback, deps: any[]){
     const hasChanged = dependencies[currentIndex] 
         ? !deps.every((dep,i) => dep === dependencies[currentIndex][i]) 
         : true;
-    console.log(dependencies[currentIndex], hasChanged);
+        
     if (hasChanged) {
         // cleanup
         if (effects[currentIndex - 1]) {
@@ -32,3 +36,4 @@ export function useEffect(effect: EffectCallback, deps: any[]){
     
     effectIndex++; 
 }
+

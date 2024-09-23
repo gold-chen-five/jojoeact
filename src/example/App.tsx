@@ -22,7 +22,7 @@ const App = () => {
     return () => {
       console.log("cleanup");
     }
-  },[count]);
+  },[count, object]);
 
   const arr = [1,2,3,4];
   return (

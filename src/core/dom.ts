@@ -5,6 +5,7 @@ import { diff } from "./diff";
 import { patch } from "./patch";
 import { setCurrentRoot } from "../shared/dom-state";
 import { resetStateIndex } from "../shared/dom-state";
+import { resetEffectIndex } from "../hooks/useEffect";
 
 export interface Root {
     renderApp: (vApp: any) => void;
@@ -31,6 +32,7 @@ export function createRoot(rootElement: HTMLElement | null): Root {
         },
         updateApp: () => {
             resetStateIndex();
+            resetEffectIndex();
             const newVApp = recreateVApp();
             const patches = diff(vApp, newVApp);
             rootNode = patch(rootNode, patches) as HTMLElement;
