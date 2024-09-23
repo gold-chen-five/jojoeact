@@ -8,3 +8,4 @@ export { patch } from './core/patch';
 export { createRoot } from './core/dom';
 export { currentRoot } from './shared/dom-state';
 export { useState } from './hooks/useState'
+export { useEffect }from './hooks/useEffect'

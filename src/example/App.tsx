@@ -1,5 +1,5 @@
 // src/App.tsx
-import { createElement, createRoot, useState } from '../index';
+import { createElement, createRoot, useState, useEffect } from '../index';
 import { Test } from './Test';
 
 const App = () => {
@@ -16,6 +16,13 @@ const App = () => {
     const value = target.value;
     setObject({test: value})
   }
+
+  useEffect(() => {
+    console.log(count)
+    return () => {
+      console.log("cleanup");
+    }
+  },[count]);
 
   return (
     <div className="my-component">
