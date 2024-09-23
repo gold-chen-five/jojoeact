@@ -24,6 +24,7 @@ const App = () => {
     }
   },[count]);
 
+  const arr = [1,2,3,4];
   return (
     <div className="my-component">
       <h1>main</h1>
@@ -31,6 +32,13 @@ const App = () => {
       <input oninput={handleOnChange}/>
       <p>{object.test}</p>
       <Test count={count}/>
+
+      {/* {
+        arr.map((v) => (
+          <div>{v}</div>
+        ))
+      } */}
+      
     </div>
   );
 };

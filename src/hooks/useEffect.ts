@@ -4,7 +4,7 @@ type EffectCallback = () => (void | (() => void));
 
 let effects: (void | (() => void))[] = [];
 let dependencies: Dependency[] = [];
-let currentIndex: number = 0;
+let effectIndex: number = 0;
 
 /**
  * @description this is a hooks that simulate to the react useEffect
@@ -12,10 +12,11 @@ let currentIndex: number = 0;
  * @param deps - useEffect will listen to the deps, when deps value change it run the effect function
  */
 export function useEffect(effect: EffectCallback, deps: any[]){
+    const currentIndex = effectIndex;
     const hasChanged = dependencies[currentIndex] 
         ? !deps.every((dep,i) => dep === dependencies[currentIndex][i]) 
         : true;
-    
+    console.log(dependencies[currentIndex], hasChanged);
     if (hasChanged) {
         // cleanup
         if (effects[currentIndex - 1]) {
@@ -29,5 +30,5 @@ export function useEffect(effect: EffectCallback, deps: any[]){
         effects[currentIndex] = effect();  
     }
     
-    currentIndex++; 
+    effectIndex++; 
 }
