@@ -23,8 +23,9 @@ function renderElementNode(vnode: VNode, container: HTMLElement): HTMLElement {
 
   // Render and append children
   vnode.children.forEach(child => {
-    const childNode = render(child, domElement);
-    domElement.appendChild(childNode);
+    if (child !== null && child !== undefined) {
+      render(child, domElement);
+    }
   });
 
   container.appendChild(domElement);
@@ -38,6 +39,10 @@ function renderComponentNode(vnode: VNode, container: HTMLElement): Node {
 }
 
 export function render(vnode: VNode | string | number, container: HTMLElement): Node {
+  if (vnode === null || vnode === undefined) {
+    return document.createComment('Empty node'); 
+  }
+
   if (typeof vnode === 'string' || typeof vnode === 'number') {
     return renderTextNode(vnode, container);
   }

@@ -9,67 +9,84 @@ export type PatchPatch = {
   childPatches: (Patch | null)[];
   additionalPatches: { type: "ADD"; newVNode: VNode }[];
 };
+
 export type Patch = 
   | ReplacePatch
   | TextPatch
-  | PatchPatch
+  | PatchPatch;
 
-export function diff(oldVNode: VNode, newVNode: VNode): Patch | null {
-   // 如果節點類型不同，直接替換
-  if (oldVNode.type !== newVNode.type) {
-    return { type: "REPLACE", newVNode };
-  }
-
-  if (
-    oldVNode.type === "TEXT_ELEMENT" &&
-    oldVNode.props.nodeValue !== newVNode.props.nodeValue
-  ) {
-    return { type: "TEXT", newVNode };
-  }
-
-   // 比較屬性的變化
+// Compare properties
+function diffProps(oldProps: { [key: string]: any }, newProps: { [key: string]: any }) {
   const propPatches: { [key: string]: any } = {};
-  for (const [key, value] of Object.entries(newVNode.props)) {
-    if (value !== oldVNode.props[key]) {
+
+  // Add or update new properties
+  for (const [key, value] of Object.entries(newProps)) {
+    if (value !== oldProps[key]) {
       propPatches[key] = value;
     }
   }
-  for (const key in oldVNode.props) {
-    if (!(key in newVNode.props)) {
+
+  // Remove old properties that are not in newProps
+  for (const key in oldProps) {
+    if (!(key in newProps)) {
       propPatches[key] = null;
     }
   }
 
-  // 比較子節點
+  return propPatches;
+}
+
+// Compare children
+function diffChildren(oldChildren: (VNode | string | number)[], newChildren: (VNode | string | number)[]) {
   const childPatches: (Patch | null)[] = [];
   const additionalPatches: { type: "ADD"; newVNode: VNode }[] = [];
-  oldVNode.children.forEach((oldChild, i) => {
-    if (
-      (typeof oldChild === "string" && typeof newVNode.children[i] === "string") ||
-      (typeof oldChild === "number" && typeof newVNode.children[i] === "number")
-    ) {
-      if (oldChild !== newVNode.children[i]) {
-        childPatches.push({ 
-          type: "TEXT",  
-          newVNode: { 
-            type: "TEXT_ELEMENT", 
-            props: { nodeValue: newVNode.children[i].toString() }, 
-            children: [] 
-          } as VNode  
+
+  oldChildren.forEach((oldChild, i) => {
+    const newChild = newChildren[i];
+
+    // Text or number comparison
+    if (typeof oldChild === "string" || typeof oldChild === "number") {
+      if (oldChild !== newChild) {
+        childPatches.push({
+          type: "TEXT",
+          newVNode: { type: "TEXT_ELEMENT", props: { nodeValue: newChild?.toString() }, children: [] } as VNode
         });
       } else {
         childPatches.push(null);
       }
-      //childPatches.push({ type: "TEXT",  newVNode: { type: "TEXT_ELEMENT", props: { nodeValue: newVNode.children[i].toString() }, children: [] } as VNode  });
     } else {
-      childPatches.push(diff(oldChild as VNode, newVNode.children[i] as VNode));
+      // Recursively diff child VNodes
+      childPatches.push(diff(oldChild as VNode, newChild as VNode));
     }
   });
 
-  for (let i = oldVNode.children.length; i < newVNode.children.length; i++) {
-    additionalPatches.push({ type: "ADD", newVNode: newVNode.children[i] as VNode });
+  // Handle additional new children
+  for (let i = oldChildren.length; i < newChildren.length; i++) {
+    additionalPatches.push({ type: "ADD", newVNode: newChildren[i] as VNode });
   }
 
+  return { childPatches, additionalPatches };
+}
+
+// Main diff function
+export function diff(oldVNode: VNode, newVNode: VNode): Patch | null {
+  // Replace if node types are different
+  if (oldVNode.type !== newVNode.type) {
+    return { type: "REPLACE", newVNode };
+  }
+
+  // Text node comparison
+  if (oldVNode.type === "TEXT_ELEMENT" && oldVNode.props.nodeValue !== newVNode.props.nodeValue) {
+    return { type: "TEXT", newVNode };
+  }
+
+  // Compare properties
+  const propPatches = diffProps(oldVNode.props, newVNode.props);
+
+  // Compare children
+  const { childPatches, additionalPatches } = diffChildren(oldVNode.children, newVNode.children);
+
+  // If there are no differences
   if (
     Object.keys(propPatches).length === 0 &&
     childPatches.every(patch => patch === null) &&
@@ -78,6 +95,7 @@ export function diff(oldVNode: VNode, newVNode: VNode): Patch | null {
     return null;
   }
 
+  // Return patch
   return {
     type: "PATCH",
     propPatches,
