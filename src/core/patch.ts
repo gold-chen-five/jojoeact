@@ -20,7 +20,7 @@ export function patch(dom: Node, patchObj: Patch | null): Node {
 }
 
 function replaceNode(dom: Node, patchObj: ReplacePatch): Node {
-  const newDOM = render(patchObj.newVNode, document.createElement("div"));
+  const newDOM = render(patchObj.newVNode, document.createElement(`${patchObj.newVNode.type}`));
   dom.parentNode!.replaceChild(newDOM, dom);
   return newDOM;
 }
@@ -50,7 +50,7 @@ function applyChildPatches(dom: Node, patchObj: PatchPatch): void {
 
 function applyAdditionalPatches(dom: Node, patchObj: PatchPatch): void {
   patchObj.additionalPatches.forEach(additionalPatch => {
-    const newChildDOM = render(additionalPatch.newVNode, document.createElement("div"));
+    const newChildDOM = render(additionalPatch.newVNode, document.createElement(`${additionalPatch.newVNode.type}`));
     dom.appendChild(newChildDOM);
   });
 }
