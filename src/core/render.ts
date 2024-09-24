@@ -1,6 +1,31 @@
 // src/core/render.ts
 import { VNode } from './vdom';
 
+export function render(vnode: VNode | string | number, container: HTMLElement): Node {
+  if (vnode === null || vnode === undefined) {
+    return document.createComment('Empty node'); 
+  }
+
+  if (typeof vnode === 'string' || typeof vnode === 'number') {
+    return renderTextNode(vnode, container);
+  }
+
+  if (Array.isArray(vnode)) {
+    vnode.forEach(child => render(child, container));  // Recursively render each child
+    return container;  // Return container as a Node after all children are rendered
+  }
+
+  if (typeof vnode.type === 'string') {
+    return renderElementNode(vnode, container);
+  }
+
+  if (typeof vnode.type === 'function') {
+    return renderComponentNode(vnode, container);
+  }
+
+  throw new Error(`Invalid VNode type: ${typeof vnode.type}`);
+}
+
 function renderTextNode(vnode: string | number, container: HTMLElement): Text {
   const textNode = document.createTextNode(vnode.toString());
   container.appendChild(textNode);
@@ -36,29 +61,4 @@ function renderComponentNode(vnode: VNode, container: HTMLElement): Node {
   const component = vnode.type as Function;
   const childVNode = component(vnode.props);
   return render(childVNode, container);
-}
-
-export function render(vnode: VNode | string | number, container: HTMLElement): Node {
-  if (vnode === null || vnode === undefined) {
-    return document.createComment('Empty node'); 
-  }
-
-  if (typeof vnode === 'string' || typeof vnode === 'number') {
-    return renderTextNode(vnode, container);
-  }
-
-  if (Array.isArray(vnode)) {
-    vnode.forEach(child => render(child, container));  // Recursively render each child
-    return container;  // Return container as a Node after all children are rendered
-  }
-
-  if (typeof vnode.type === 'string') {
-    return renderElementNode(vnode, container);
-  }
-
-  if (typeof vnode.type === 'function') {
-    return renderComponentNode(vnode, container);
-  }
-
-  throw new Error(`Invalid VNode type: ${typeof vnode.type}`);
 }

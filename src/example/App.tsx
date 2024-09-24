@@ -34,11 +34,11 @@ const App = () => {
       <p>{object.test}</p>
       <Test count={count}/>
 
-      {
+      {/* {
         arr.map((v) => (
           <div>{v}</div>
         ))
-      }
+      } */}
       
     </div>
   );

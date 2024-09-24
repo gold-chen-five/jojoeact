@@ -15,6 +15,52 @@ export type Patch =
   | TextPatch
   | PatchPatch;
 
+  // Main diff function
+export function diff(oldVNode: VNode, newVNode: VNode): Patch | null {
+  // Handle arrays of VNodes
+  if (Array.isArray(oldVNode) && Array.isArray(newVNode)) {
+    return diffArrays(oldVNode, newVNode);
+  }
+  
+  // If one is array and the other is not, we replace
+  if (Array.isArray(oldVNode) || Array.isArray(newVNode)) {
+    return { type: "REPLACE", newVNode: Array.isArray(newVNode) ? newVNode[0] : newVNode };
+  }
+
+  // Replace if node types are different
+  if (oldVNode.type !== newVNode.type) {
+    return { type: "REPLACE", newVNode };
+  }
+
+  // Text node comparison
+  if (oldVNode.type === "TEXT_ELEMENT" && oldVNode.props.nodeValue !== newVNode.props.nodeValue) {
+    return { type: "TEXT", newVNode };
+  }
+
+  // Compare properties
+  const propPatches = diffProps(oldVNode.props, newVNode.props);
+
+  // Compare children
+  const { childPatches, additionalPatches } = diffChildren(oldVNode.children, newVNode.children);
+
+  // If there are no differences
+  if (
+    Object.keys(propPatches).length === 0 &&
+    childPatches.every(patch => patch === null) &&
+    additionalPatches.length === 0
+  ) {
+    return null;
+  }
+
+  // Return patch
+  return {
+    type: "PATCH",
+    propPatches,
+    childPatches,
+    additionalPatches
+  };
+}
+
 // Compare properties
 function diffProps(oldProps: { [key: string]: any }, newProps: { [key: string]: any }) {
   const propPatches: { [key: string]: any } = {};
@@ -68,38 +114,7 @@ function diffChildren(oldChildren: (VNode | string | number)[], newChildren: (VN
   return { childPatches, additionalPatches };
 }
 
-// Main diff function
-export function diff(oldVNode: VNode, newVNode: VNode): Patch | null {
-  // Replace if node types are different
-  if (oldVNode.type !== newVNode.type) {
-    return { type: "REPLACE", newVNode };
-  }
+function diffArrays(oldVNode: VNode, newVNode: VNode){
 
-  // Text node comparison
-  if (oldVNode.type === "TEXT_ELEMENT" && oldVNode.props.nodeValue !== newVNode.props.nodeValue) {
-    return { type: "TEXT", newVNode };
-  }
-
-  // Compare properties
-  const propPatches = diffProps(oldVNode.props, newVNode.props);
-
-  // Compare children
-  const { childPatches, additionalPatches } = diffChildren(oldVNode.children, newVNode.children);
-
-  // If there are no differences
-  if (
-    Object.keys(propPatches).length === 0 &&
-    childPatches.every(patch => patch === null) &&
-    additionalPatches.length === 0
-  ) {
-    return null;
-  }
-
-  // Return patch
-  return {
-    type: "PATCH",
-    propPatches,
-    childPatches,
-    additionalPatches
-  };
 }
+
