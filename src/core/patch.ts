@@ -3,7 +3,6 @@ import { render } from './render';
 import { Patch, ReplacePatch, TextPatch, PatchPatch, ArrayPatch } from './diff';
 
 export function patch(dom: Node, patchObj: Patch | null): Node {
-  console.log(dom)
   if (!patchObj) return dom;
   switch (patchObj.type) {
     case "REPLACE":
@@ -60,7 +59,6 @@ function applyChildPatches(dom: Node, patchObj: PatchPatch): void {
     } else {
       patch(dom.childNodes[i], childPatch);
     }
-    
   });
 }
 

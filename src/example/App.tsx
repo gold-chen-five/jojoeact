@@ -18,7 +18,6 @@ const App = () => {
   }
 
   useEffect(() => {
-    console.log(count)
     return () => {
       console.log("cleanup");
     }

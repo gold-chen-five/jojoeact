@@ -26,12 +26,12 @@ export function useEffect(effect: EffectCallback, deps: any[]){
         if (effects[currentIndex - 1]) {
             const cleanup = effects[currentIndex - 1];
             if (typeof cleanup === 'function') {
-                cleanup();  // 
+                cleanup(); 
             }
         }
     
         dependencies[currentIndex] = deps;
-        effects[currentIndex] = effect();  
+        effects[currentIndex] = effect();
     }
     
     effectIndex++; 
