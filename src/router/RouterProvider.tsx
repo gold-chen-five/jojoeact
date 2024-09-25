@@ -2,7 +2,7 @@ import { useEffect } from "../hooks/useEffect";
 import { useState } from "../hooks/useState";
 import { navigate } from "./navigate";
 
-type Route = {
+export type Route = {
     path: string;
     component: () => any;
     loader?: () => void | Promise<any | {redirect: string}>;

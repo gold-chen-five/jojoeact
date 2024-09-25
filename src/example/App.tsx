@@ -2,7 +2,7 @@
 import { createElement, createRoot, useState, useEffect } from '../index';
 import { Test } from './Test';
 
-const App = () => {
+export const App = () => {
   const [count, setCount] = useState<number>(0);
   const [object, setObject] = useState<{test: string}>({test: 'hello'});
 
@@ -51,6 +51,6 @@ const App = () => {
   );
 };
 
-const root = createRoot(document.getElementById('jojo'));
-root.renderApp(App);
+// const root = createRoot(document.getElementById('jojo'));
+// root.renderApp(App);
 
