@@ -10,10 +10,17 @@ export type PatchPatch = {
   additionalPatches: { type: "ADD"; newVNode: VNode }[];
 };
 
+export type ArrayPatch = {
+  type: "ARRAY"; 
+  childPatches: (Patch | null)[];
+  additionalPatches: { type: "ADD"; newVNode: VNode }[];
+};
+
 export type Patch = 
   | ReplacePatch
   | TextPatch
-  | PatchPatch;
+  | PatchPatch
+  | ArrayPatch;
 
   // Main diff function
 export function diff(oldVNode: VNode | VNode[], newVNode: VNode | VNode[]): Patch | null {
@@ -59,6 +66,32 @@ export function diff(oldVNode: VNode | VNode[], newVNode: VNode | VNode[]): Patc
     childPatches,
     additionalPatches
   };
+}
+
+function diffArrays(oldVNode: VNode[], newVNode: VNode[]): ArrayPatch | null{
+  const patches: ArrayPatch = {
+    type: "ARRAY",
+    childPatches: [],
+    additionalPatches: []
+  };
+
+  const minLength = Math.min(oldVNode.length, newVNode.length);
+
+  //  Diff each pair of VNodes
+  for(let i=0; i<minLength ; i++) {
+    patches.childPatches.push(diff(oldVNode[i], newVNode[i]));
+  }
+
+  // Add additional new VNodes
+  for(let i=minLength ; i<newVNode.length ; i++) {
+    patches.additionalPatches.push({ type: 'ADD', newVNode: newVNode[i]});
+  }
+
+  if (patches.childPatches.some(p => p !== null) || patches.additionalPatches.length > 0) {
+    return patches;
+  }
+
+  return null;
 }
 
 // Compare properties
@@ -114,30 +147,4 @@ function diffChildren(oldChildren: (VNode | string | number)[], newChildren: (VN
   return { childPatches, additionalPatches };
 }
 
-function diffArrays(oldVNode: VNode[], newVNode: VNode[]): PatchPatch | null{
-  const patches: PatchPatch = {
-    type: "PATCH",
-    propPatches: {},
-    childPatches: [],
-    additionalPatches: []
-  };
-
-  const minLength = Math.min(oldVNode.length, newVNode.length);
-
-  //  Diff each pair of VNodes
-  for(let i=0; i<minLength ; i++) {
-    patches.childPatches.push(diff(oldVNode[i], newVNode[i]));
-  }
-
-  // Add additional new VNodes
-  for(let i=minLength ; i<newVNode.length ; i++) {
-    patches.additionalPatches.push({ type: 'ADD', newVNode: newVNode[i]});
-  }
-
-  if (patches.childPatches.some(p => p !== null) || patches.additionalPatches.length > 0) {
-    return patches;
-  }
-
-  return null;
-}
 

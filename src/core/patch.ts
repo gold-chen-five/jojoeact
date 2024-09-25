@@ -1,14 +1,19 @@
 // src/core/patch.ts
 import { render } from './render';
-import { Patch, ReplacePatch, TextPatch, PatchPatch } from './diff';
+import { Patch, ReplacePatch, TextPatch, PatchPatch, ArrayPatch } from './diff';
 
 export function patch(dom: Node, patchObj: Patch | null): Node {
+  console.log(dom)
   if (!patchObj) return dom;
   switch (patchObj.type) {
     case "REPLACE":
       return replaceNode(dom, patchObj);
     case "TEXT":
       return updateTextNode(dom, patchObj);
+    case "ARRAY":
+      applyArrayChildPatches(dom, patchObj);
+      applyAdditionalPatches(dom, patchObj);
+      break;
     case "PATCH":
       applyPropPatches(dom, patchObj);
       applyChildPatches(dom, patchObj);
@@ -30,6 +35,12 @@ function updateTextNode(dom: Node, patchObj: TextPatch): Node {
   return dom;
 }
 
+function applyArrayChildPatches(dom: Node, patchObj: ArrayPatch): void {
+  patchObj.childPatches.forEach((childPatch) => {
+    patch(dom, childPatch);
+  });
+}
+
 function applyPropPatches(dom: Node, patchObj: PatchPatch): void {
   for (const [key, value] of Object.entries(patchObj.propPatches)) {
     if (value === null) {
@@ -44,11 +55,17 @@ function applyPropPatches(dom: Node, patchObj: PatchPatch): void {
 
 function applyChildPatches(dom: Node, patchObj: PatchPatch): void {
   patchObj.childPatches.forEach((childPatch, i) => {
-    patch(dom.childNodes[i], childPatch);
+    if(childPatch?.type === "ARRAY") {
+      patch(dom, childPatch);
+    } else {
+      patch(dom.childNodes[i], childPatch);
+    }
+    
   });
 }
 
-function applyAdditionalPatches(dom: Node, patchObj: PatchPatch): void {
+function applyAdditionalPatches(dom: Node, patchObj: PatchPatch | ArrayPatch): void {
+  //console.log(dom);
   patchObj.additionalPatches.forEach(additionalPatch => {
     const newChildDOM = render(additionalPatch.newVNode, document.createElement(`${additionalPatch.newVNode.type}`));
     dom.appendChild(newChildDOM);

@@ -35,6 +35,7 @@ export function createRoot(rootElement: HTMLElement | null): Root {
             resetEffectIndex();
             const newVApp = recreateVApp();
             const patches = diff(vApp, newVApp);
+            console.log(patches);
             rootNode = patch(rootNode, patches) as HTMLElement;
             vApp = newVApp;
         }

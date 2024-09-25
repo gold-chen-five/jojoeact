@@ -24,8 +24,16 @@ const App = () => {
     }
   },[count]);
 
-  const arr = [1,2,3,4];
-  
+  function createArr(length: number): number[]{
+    let arr = [];
+    for(let i=0; i<length ; i++) {
+      arr.push(i);
+    }
+    return arr;
+  }
+
+  const arr = createArr(count);
+
   return (
     <div className="my-component">
       <h1>main</h1>
