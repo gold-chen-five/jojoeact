@@ -22,7 +22,7 @@ const App = () => {
     return () => {
       console.log("cleanup");
     }
-  },[count, object]);
+  },[count]);
 
   const arr = [1,2,3,4];
   
@@ -34,11 +34,11 @@ const App = () => {
       <p>{object.test}</p>
       <Test count={count}/>
 
-      {/* {
+      {
         arr.map((v) => (
           <div>{v}</div>
         ))
-      } */}
+      }
       
     </div>
   );

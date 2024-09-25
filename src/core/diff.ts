@@ -16,7 +16,7 @@ export type Patch =
   | PatchPatch;
 
   // Main diff function
-export function diff(oldVNode: VNode, newVNode: VNode): Patch | null {
+export function diff(oldVNode: VNode | VNode[], newVNode: VNode | VNode[]): Patch | null {
   // Handle arrays of VNodes
   if (Array.isArray(oldVNode) && Array.isArray(newVNode)) {
     return diffArrays(oldVNode, newVNode);
@@ -114,7 +114,30 @@ function diffChildren(oldChildren: (VNode | string | number)[], newChildren: (VN
   return { childPatches, additionalPatches };
 }
 
-function diffArrays(oldVNode: VNode, newVNode: VNode){
+function diffArrays(oldVNode: VNode[], newVNode: VNode[]): PatchPatch | null{
+  const patches: PatchPatch = {
+    type: "PATCH",
+    propPatches: {},
+    childPatches: [],
+    additionalPatches: []
+  };
 
+  const minLength = Math.min(oldVNode.length, newVNode.length);
+
+  //  Diff each pair of VNodes
+  for(let i=0; i<minLength ; i++) {
+    patches.childPatches.push(diff(oldVNode[i], newVNode[i]));
+  }
+
+  // Add additional new VNodes
+  for(let i=minLength ; i<newVNode.length ; i++) {
+    patches.additionalPatches.push({ type: 'ADD', newVNode: newVNode[i]});
+  }
+
+  if (patches.childPatches.some(p => p !== null) || patches.additionalPatches.length > 0) {
+    return patches;
+  }
+
+  return null;
 }
 

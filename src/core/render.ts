@@ -1,7 +1,7 @@
 // src/core/render.ts
 import { VNode } from './vdom';
 
-export function render(vnode: VNode | string | number, container: HTMLElement): Node {
+export function render(vnode: VNode | string | number | VNode[], container: HTMLElement): Node {
   if (vnode === null || vnode === undefined) {
     return document.createComment('Empty node'); 
   }
