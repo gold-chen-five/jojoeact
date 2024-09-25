@@ -1,5 +1,5 @@
 // src/App.tsx
-import { createElement, createRoot, useState, useEffect } from '../index';
+import { createElement, useState, useEffect } from '../index';
 import { Test } from './Test';
 
 export const App = () => {
@@ -50,7 +50,4 @@ export const App = () => {
     </div>
   );
 };
-
-// const root = createRoot(document.getElementById('jojo'));
-// root.renderApp(App);
 

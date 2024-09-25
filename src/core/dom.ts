@@ -25,7 +25,7 @@ export function createRoot(rootElement: HTMLElement | null): Root {
             if (typeof App !== 'function') {
                 throw new Error("renderApp param's type must be a function")
             }
-            recreateVApp = App;  
+            recreateVApp = App; 
             vApp = recreateVApp();
             rootNode = render(vApp, rootElement);
             root.updateApp();

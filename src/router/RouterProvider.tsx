@@ -1,6 +1,7 @@
 import { useEffect } from "../hooks/useEffect";
 import { useState } from "../hooks/useState";
 import { navigate } from "./navigate";
+import { createElement } from "../core/vdom";
 
 export type Route = {
     path: string;
@@ -11,7 +12,7 @@ export type Route = {
 
 export function RouterProvider({ routes } : { routes: Route[] }){
     const [currentPath, setCurrentPath] = useState<string>(window.location.pathname);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
     const [data, setData] = useState<any>(null);
 
     useEffect(() => {
@@ -26,6 +27,7 @@ export function RouterProvider({ routes } : { routes: Route[] }){
             setCurrentPath(window.location.pathname);
             const matchedRoute = matchRoute(window.location.pathname, routes);
             if(matchedRoute && matchedRoute.loader) {
+                setLoading(true);
                 const returnData = await matchedRoute.loader();
                 
                 if(returnData?.redirect) {
@@ -45,10 +47,10 @@ export function RouterProvider({ routes } : { routes: Route[] }){
     const matchedRoute = matchRoute(currentPath, routes);
 
     if(!matchedRoute) throw new Error("there is no matched path");
-    if(loading)  return null;
+    if(loading)  return <div></div>;
 
     const Component = matchedRoute.component;
-    return Component;
+    return <Component />;
 }
 
 // recursive to find match route
