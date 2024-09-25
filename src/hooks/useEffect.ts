@@ -23,8 +23,8 @@ export function useEffect(effect: EffectCallback, deps: any[]){
         
     if (hasChanged) {
         // cleanup
-        if (effects[currentIndex - 1]) {
-            const cleanup = effects[currentIndex - 1];
+        if (effects[currentIndex]) {
+            const cleanup = effects[currentIndex];
             if (typeof cleanup === 'function') {
                 cleanup(); 
             }
