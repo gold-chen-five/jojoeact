@@ -26,6 +26,7 @@ export function RouterProvider({ routes } : { routes: Route[] }){
         async function handleLocationChange(){
             setCurrentPath(window.location.pathname);
             const matchedRoute = matchRoute(window.location.pathname, routes);
+            console.log(matchedRoute)
             if(matchedRoute && matchedRoute.loader) {
                 setLoading(true);
                 const returnData = await matchedRoute.loader();
@@ -39,7 +40,7 @@ export function RouterProvider({ routes } : { routes: Route[] }){
                 setLoading(false);
             }
         }
-
+        handleLocationChange();
         window.addEventListener('popstate', handleLocationChange);
         return () => window.removeEventListener('popstate', handleLocationChange);
     },[routes])

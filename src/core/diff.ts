@@ -35,6 +35,7 @@ export function diff(oldVNode: VNode | VNode[], newVNode: VNode | VNode[]): Patc
   }
 
   // Replace if node types are different
+  console.log(oldVNode, newVNode)
   if (oldVNode.type !== newVNode.type) {
     return { type: "REPLACE", newVNode };
   }

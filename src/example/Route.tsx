@@ -5,11 +5,14 @@ import { Dev } from "./Dev";
 const routes: Route[] = [
     {
         path: '/',
-        component: App 
+        component: App,
     },
     {
         path: '/dev',
-        component: Dev
+        component: Dev,
+        loader: () => {
+            console.log('dev')
+        } 
     }
 ]
 
