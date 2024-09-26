@@ -33,7 +33,6 @@ export const App = () => {
   }
 
   const arr = createArr(count);
-
   return (
     <div className="my-component">
       <h1>main</h1>
@@ -42,11 +41,11 @@ export const App = () => {
       <p>{object.test}</p>
       <Test count={count}/>
 
-      {
+      {/* {
         arr.map((v) => (
           <div>{v}</div>
         ))
-      }
+      } */}
       
     </div>
   );

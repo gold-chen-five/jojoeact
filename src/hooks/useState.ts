@@ -20,7 +20,6 @@ export function useState<T>(initialValue: T): [T, (value: T | ((prevState: T) =>
 
   function setState(value: T | ((prevState: T) => T)):void {
     let newValue = value;
-
     // can use an callback function to get prev value
     if(typeof value === 'function') {
       const callback = value as ((prevState: T) => T);
