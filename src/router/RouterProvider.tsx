@@ -10,7 +10,7 @@ export type Route = {
     children?: Route[];
 };
 
-export function RouterProvider({ routes } : { routes: Route[] }){
+export function RouterProvider({ routes } : { routes: Route[] }): () => any{
     const [currentPath, setCurrentPath] = useState<string>(window.location.pathname);
     const [loading, setLoading] = useState<boolean>(true);
     const [data, setData] = useState<any>(null);
@@ -50,7 +50,7 @@ export function RouterProvider({ routes } : { routes: Route[] }){
     if(loading)  return <div></div>;
 
     const Component = matchedRoute.component;
-    return <Component />;
+    return <Component/>;
 }
 
 // recursive to find match route

@@ -8,6 +8,7 @@ export const App = () => {
 
   // Define a handler for the button click
   function handleClick() {
+    console.log('test')
     setCount((prev) => prev+1);
   }
 

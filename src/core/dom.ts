@@ -21,7 +21,8 @@ export function createRoot(rootElement: HTMLElement | null): Root {
     let recreateVApp: () => VNode;
 
     const root: Root =  { 
-        renderApp: (App) => {
+        renderApp: (App: () => any) => {
+            console.log(App)
             if (typeof App !== 'function') {
                 throw new Error("renderApp param's type must be a function")
             }
@@ -35,6 +36,7 @@ export function createRoot(rootElement: HTMLElement | null): Root {
             resetStateIndex();
             resetEffectIndex();
             const newVApp = recreateVApp();
+            console.log(newVApp)
             const patches = diff(vApp, newVApp);
             rootNode = patch(rootNode, patches) as HTMLElement;
             vApp = newVApp;
