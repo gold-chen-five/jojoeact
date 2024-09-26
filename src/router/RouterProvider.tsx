@@ -12,7 +12,7 @@ export type Route = {
 
 export function RouterProvider({ routes } : { routes: Route[] }){
     const [currentPath, setCurrentPath] = useState<string>(window.location.pathname);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const [data, setData] = useState<any>(null);
 
     useEffect(() => {
@@ -26,7 +26,6 @@ export function RouterProvider({ routes } : { routes: Route[] }){
         async function handleLocationChange(){
             setCurrentPath(window.location.pathname);
             const matchedRoute = matchRoute(window.location.pathname, routes);
-            console.log(matchedRoute)
             if(matchedRoute && matchedRoute.loader) {
                 setLoading(true);
                 const returnData = await matchedRoute.loader();
@@ -37,8 +36,8 @@ export function RouterProvider({ routes } : { routes: Route[] }){
                 }
 
                 setData(returnData);
-                setLoading(false);
             }
+            setLoading(false);
         }
         handleLocationChange();
         window.addEventListener('popstate', handleLocationChange);

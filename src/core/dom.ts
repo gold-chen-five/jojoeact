@@ -31,6 +31,7 @@ export function createRoot(rootElement: HTMLElement | null): Root {
             root.updateApp();
         },
         updateApp: () => {
+            if(!vApp)  return;
             resetStateIndex();
             resetEffectIndex();
             const newVApp = recreateVApp();
