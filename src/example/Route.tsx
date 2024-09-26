@@ -6,6 +6,9 @@ const routes: Route[] = [
     {
         path: '/',
         component: App,
+        loader: () => {
+            console.log('app');
+        }
     },
     {
         path: '/dev',

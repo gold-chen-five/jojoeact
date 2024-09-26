@@ -27,9 +27,7 @@ export function RouterProvider({ routes } : { routes: Route[] }): () => any{
             setCurrentPath(window.location.pathname);
             const matchedRoute = matchRoute(window.location.pathname, routes);
             if(matchedRoute && matchedRoute.loader) {
-                setLoading(true);
                 const returnData = await matchedRoute.loader();
-                
                 if(returnData?.redirect) {
                     navigate(returnData.redirect);
                     return;
@@ -44,8 +42,8 @@ export function RouterProvider({ routes } : { routes: Route[] }): () => any{
         return () => window.removeEventListener('popstate', handleLocationChange);
     },[routes])
 
+   
     const matchedRoute = matchRoute(currentPath, routes);
-
     if(!matchedRoute) throw new Error("there is no matched path");
     if(loading)  return <div></div>;
 
