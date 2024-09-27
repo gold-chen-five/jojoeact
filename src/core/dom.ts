@@ -32,11 +32,10 @@ export function createRoot(rootElement: HTMLElement | null): Root {
             root.updateApp();
         },
         updateApp: () => {
-            if(!vApp)  return;
+            if(!vApp) return;
             resetStateIndex();
             resetEffectIndex();
             const newVApp = recreateVApp();
-            console.log(vApp, newVApp)
             const patches = diff(vApp, newVApp);
             rootNode = patch(rootNode, patches) as HTMLElement;
             vApp = newVApp;
