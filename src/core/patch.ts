@@ -44,8 +44,6 @@ function applyPropPatches(dom: Node, patchObj: PatchPatch): void {
   for (const [key, value] of Object.entries(patchObj.propPatches)) {
     if (value === null) {
       (dom as Element).removeAttribute(key);
-    } else if (key.startsWith("on") && typeof value === "function") {
-      (dom as HTMLElement & { [key: string]: any })[key] = value; // Set event handler
     } else {
       (dom as Element).setAttribute(key, value);
     }

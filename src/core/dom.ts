@@ -22,7 +22,6 @@ export function createRoot(rootElement: HTMLElement | null): Root {
 
     const root: Root =  { 
         renderApp: (App: () => any) => {
-            console.log(App)
             if (typeof App !== 'function') {
                 throw new Error("renderApp param's type must be a function")
             }

@@ -35,7 +35,12 @@ function renderTextNode(vnode: string | number, container: HTMLElement): Text {
 function setElementProps(domElement: HTMLElement, props: Record<string, any>): void {
   Object.entries(props).forEach(([key, value]) => {
     if (key !== 'children') {
-      domElement.setAttribute(key, value);
+      if (key.startsWith('on')) {
+        const eventType = key.slice(2).toLowerCase();
+        domElement.addEventListener(eventType, value);
+      } else {
+        domElement.setAttribute(key, value);
+      }
     }
   });
 }
