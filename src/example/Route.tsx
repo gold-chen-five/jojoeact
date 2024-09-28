@@ -1,17 +1,18 @@
-import { Route, RouterProvider } from "../index"
-import { App } from "./App"
+import { Route, RouterProvider, redirect } from "../index";
+import { App } from "./App";
 import { Dev } from "./Dev";
 
 const routes: Route[] = [
     {
-        path: '/',
+        path: "/",
         component: App
     },
     {
-        path: '/dev',
+        path: "/dev",
         component: Dev,
         loader: () => {
-            console.log('dev')
+            console.log("dev");
+            return redirect("/");
         } 
     }
 ]

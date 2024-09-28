@@ -3,10 +3,12 @@ import { useState } from "../hooks/useState";
 import { navigate } from "./navigate";
 import { createElement } from "../core/vdom";
 
+type Redirect = { redirect: string}
+
 export type Route = {
     path: string;
     component: () => any;
-    loader?: () => void | Promise<any | {redirect: string}>;
+    loader?: () => void | Promise<any | Redirect> | any | Redirect;
     children?: Route[];
 };
 
@@ -67,3 +69,10 @@ function matchRoute(pathname: string, routes: Route[]): Route | undefined {
     return undefined;
 }
 
+/**
+ * @description use in loader, use the path to redirect
+ * @param to path
+ */
+export function redirect(to: string):Redirect {
+    return { redirect: to }
+}

@@ -9,6 +9,6 @@ export { createRoot } from './core/dom';
 export { currentRoot } from './shared/dom-state';
 export { useState } from './hooks/useState'
 export { useEffect } from './hooks/useEffect'
-export { RouterProvider } from './router/RouterProvider'
+export { RouterProvider,redirect } from './router/RouterProvider'
 export type { Route } from './router/RouterProvider'
 export { navigate } from './router/navigate'
