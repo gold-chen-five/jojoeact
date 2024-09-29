@@ -5,7 +5,6 @@ type EffectCallback = () => (void | (() => void));
 let effects: (void | (() => void))[] = [];
 let dependencies: Dependency[] = [];
 let effectIndex: number = 0;
-
 export function resetEffectIndex(){
     effectIndex = 0;
 }
@@ -20,7 +19,7 @@ export function useEffect(effect: EffectCallback, deps: any[]){
     const hasChanged = dependencies[currentIndex] 
         ? !deps.every((dep,i) => dep === dependencies[currentIndex][i]) 
         : true;
-        
+
     if (hasChanged) {
         // cleanup
         if (effects[currentIndex]) {
