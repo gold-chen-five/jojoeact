@@ -1,16 +1,25 @@
 import { currentRoot } from "../shared/dom-state";
 
+/**
+ * this global state is to manage all useState's states
+ * when every function execute ,whether inside the function have useState hook,
+ * it store to this global state, stateIndex will ++   
+ * when execute currentRoot.updateApp() will trigger resetStateIndex.
+ */
 let states: any[] = [];
 let stateIndex: number = 0;
-
 function increaseStateIndex(): void {
   stateIndex++;
 }
-
 export function resetStateIndex():void {
   stateIndex = 0;
 }
 
+/**
+ * @description setState will trigger currentRoot.updateApp(),currentRoot.updateApp() will cause VDom to rerender
+ * @param initialValue init state
+ * @returns return state ans setState
+ */
 export function useState<T>(initialValue: T): [T, (value: T | ((prevState: T) => T)) => void] {
   const currentIndex = stateIndex;
   increaseStateIndex();
