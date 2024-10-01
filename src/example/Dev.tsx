@@ -1,11 +1,15 @@
-import { createElement, useState } from "../index"
+import { createElement } from "../index"
+import { useTest } from "./store"
+import { DevTwo } from "./DevTwo";
 
 export function Dev(){
-    const [test,setTest] = useState(0)
+    const { value, setValue } = useTest();
+
     return (
         <div>
-            <button onClick={() => setTest(prev => prev + 1)}>test</button>
-            <p>{test}</p>
+            <button onclick={() => setValue("test")}>click</button>
+            <div>{ value }</div>
+            <DevTwo />
         </div>
     )
 }
