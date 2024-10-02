@@ -2,20 +2,22 @@ import { useEffect } from "../hooks/useEffect";
 import { useState } from "../hooks/useState";
 import { navigate } from "./navigate";
 import { createElement } from "../core/vdom";
+import { useLoader, LoaderData } from "../router/useLoaderData";
 
 type Redirect = { redirect: string}
 
 export type Route = {
     path: string;
     component: () => any;
-    loader?: () => void | Promise<any | Redirect> | any | Redirect;
+    loader?: <T>() => void | Promise<T | Redirect> | any | Redirect;
     children?: Route[];
 };
 
 export function RouterProvider({ routes } : { routes: Route[] }): () => any{
     const [currentPath, setCurrentPath] = useState<string>(window.location.pathname);
     const [loading, setLoading] = useState<boolean>(true);
-    const [data, setData] = useState<any>(null);
+    //const [data, setData] = useState<any>(null);
+    const { data, setData } = useLoader<LoaderData>();
 
     useEffect(() => {
         /**
@@ -30,6 +32,7 @@ export function RouterProvider({ routes } : { routes: Route[] }): () => any{
             const matchedRoute = matchRoute(window.location.pathname, routes);
             if(matchedRoute && matchedRoute.loader) {
                 setLoading(true);
+                setData(null);
                 const returnData = await matchedRoute.loader();
                 if(returnData?.redirect) {
                     navigate(returnData.redirect);
@@ -39,11 +42,11 @@ export function RouterProvider({ routes } : { routes: Route[] }): () => any{
             }
             setLoading(false);
         }
+
         handleLocationChange();
         window.addEventListener('popstate', handleLocationChange);
         return () => window.removeEventListener('popstate', handleLocationChange);
     },[routes])
-
 
     const matchedRoute = matchRoute(currentPath, routes);
     if(!matchedRoute) throw new Error("there is no matched path");

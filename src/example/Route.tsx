@@ -10,10 +10,9 @@ const routes: Route[] = [
     {
         path: "/dev",
         component: Dev,
-        // loader: () => {
-        //     console.log("dev");
-        //     return redirect("/");
-        // } 
+        loader: () => {
+            return {user: 'test'};
+        } 
     }
 ]
 
