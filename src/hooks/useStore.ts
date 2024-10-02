@@ -23,14 +23,28 @@ type StateCreator<T> = (set: SetStateInternal<T>, get: () => T) => T;
  * @param createState function, (set) => 
  * @returns return useStore hook
  */
-export function create<T>(createState: StateCreator<T>):(selector?: (state: T) => T) => T {
+export function create<T extends object>(createState: StateCreator<T>):(<U>(selector?: (state: T) => U) => U) {
     let state: T;
     const listeners = new Set<(state: T) => void>();
 
+    // check every state
+    const checkIsSame = (oldState: T, newState: T): boolean => {
+        let isSame = true;
+        for (const property in newState) {
+            if(oldState[property] !== newState[property]) {
+                isSame = false;
+                break;
+            } 
+        }
+        return isSame;
+    }
+
     const setState:SetStateInternal<T> = (partial) => {
         const nextState = typeof partial === 'function' ? (partial as (state:T) => T)(state) : partial;
-        if(!Object.is(nextState, state)) {
-            state = { ...state, ...nextState }; // state will have actions
+        const nextStateAndAction = { ...state, ...nextState };
+
+        if(!checkIsSame(state, nextStateAndAction)) {
+            state = nextStateAndAction; // state will have actions
             listeners.forEach(listener => listener(state));
         }
     }
@@ -44,14 +58,14 @@ export function create<T>(createState: StateCreator<T>):(selector?: (state: T) =
         return () => listeners.delete(listener);
     }
 
-    const useStore = (selector: (state: T) => T = (state) => state): T => {
+    const useStore = <U>(selector: (state: T) => U = (state: T) => state as unknown as U ): U => {
         const [ selectedState, setSelectedState ] = useState(selector(state));
 
         useEffect(() => {
             const unsubscribe = subscribe((state) => {
                 const nextState = selector(state);
                 if (!Object.is(nextState, selectedState)) {
-                  setSelectedState(nextState);
+                    setSelectedState(nextState);
                 }
             });
 

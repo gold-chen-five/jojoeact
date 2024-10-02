@@ -1,6 +1,6 @@
 import { create } from "../index";
 
-type Test = {
+export type Test = {
     value: string;
     setValue: (value: string) => void
 }
