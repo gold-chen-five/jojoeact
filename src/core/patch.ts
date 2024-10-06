@@ -1,10 +1,12 @@
 // src/core/patch.ts
 import { render } from './render';
-import { Patch, ReplacePatch, TextPatch, PatchPatch, ArrayPatch } from './diff';
+import { Patch, RemovePatch,ReplacePatch, TextPatch, PatchPatch, ArrayPatch } from './diff';
 
 export function patch(dom: Node, patchObj: Patch | null): Node {
   if (!patchObj) return dom;
   switch (patchObj.type) {
+    case "REMOVE":
+      return removeNode(dom, patchObj);
     case "REPLACE":
       return replaceNode(dom, patchObj);
     case "TEXT":
@@ -23,7 +25,15 @@ export function patch(dom: Node, patchObj: Patch | null): Node {
   return dom;
 }
 
+function removeNode(dom: Node, patchObj: RemovePatch): Node {
+  //console.log(dom);
+  if(!dom) return dom;
+  const removedNode = dom.parentNode!.removeChild(dom);
+  return removedNode;
+}
+
 function replaceNode(dom: Node, patchObj: ReplacePatch): Node {
+  console.log(dom, patchObj)
   const newDOM = render(patchObj.newVNode, document.createElement(`${patchObj.newVNode.type}`));
   dom.parentNode!.replaceChild(newDOM, dom);
   return newDOM;

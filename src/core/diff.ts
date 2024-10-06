@@ -2,6 +2,7 @@
 import type { VNode } from './vdom';
 
 export type ReplacePatch = { type: "REPLACE"; newVNode: VNode };
+export type RemovePatch = { type: "REMOVE"; oldVNode: VNode | VNode[]};
 export type TextPatch = { type: "TEXT"; newVNode: VNode };
 export type PatchPatch = { 
   type: "PATCH"; 
@@ -18,12 +19,14 @@ export type ArrayPatch = {
 
 export type Patch = 
   | ReplacePatch
+  | RemovePatch
   | TextPatch
   | PatchPatch
   | ArrayPatch;
 
   // Main diff function
 export function diff(oldVNode: VNode | VNode[], newVNode: VNode | VNode[]): Patch | null {
+
   // Handle arrays of VNodes
   if (Array.isArray(oldVNode) && Array.isArray(newVNode)) {
     return diffArrays(oldVNode, newVNode);
@@ -31,11 +34,20 @@ export function diff(oldVNode: VNode | VNode[], newVNode: VNode | VNode[]): Patc
   
   // If one is array and the other is not, we replace
   if (Array.isArray(oldVNode) || Array.isArray(newVNode)) {
-    return { type: "REPLACE", newVNode: Array.isArray(newVNode) ? newVNode[0] : newVNode };
+    if(!newVNode) {
+      return { type: "REMOVE", oldVNode};
+    } else {
+      return { type: "REPLACE", newVNode: Array.isArray(newVNode) ? newVNode[0] : newVNode };
+    }
+  }
+
+  // Remove old node
+  if (oldVNode && !newVNode) {
+    return { type: "REMOVE", oldVNode};
   }
 
   // Replace if node types are different
-  if (oldVNode.type !== newVNode.type) {
+  if (oldVNode?.type !== newVNode?.type) {
     return { type: "REPLACE", newVNode };
   }
 
@@ -111,7 +123,6 @@ function diffProps(oldProps: { [key: string]: any }, newProps: { [key: string]: 
       propPatches[key] = null;
     }
   }
-
   return propPatches;
 }
 

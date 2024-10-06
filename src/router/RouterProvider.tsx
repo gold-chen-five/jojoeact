@@ -15,9 +15,7 @@ export type Route = {
 
 export function RouterProvider({ routes } : { routes: Route[] }): () => any{
     const [currentPath, setCurrentPath] = useState<string>(window.location.pathname);
-    const [loading, setLoading] = useState<boolean>(true);
-    //const [data, setData] = useState<any>(null);
-    const { data, setData } = useLoader<LoaderData>();
+    const { setData, isFinish } = useLoader<LoaderData>();
 
     useEffect(() => {
         /**
@@ -31,16 +29,16 @@ export function RouterProvider({ routes } : { routes: Route[] }): () => any{
             setCurrentPath(window.location.pathname);
             const matchedRoute = matchRoute(window.location.pathname, routes);
             if(matchedRoute && matchedRoute.loader) {
-                setLoading(true);
-                setData(null);
+                setData(null, false);
                 const returnData = await matchedRoute.loader();
                 if(returnData?.redirect) {
                     navigate(returnData.redirect);
                     return;
                 }
-                setData(returnData); 
+                setData(returnData, true); 
+            } else {
+                setData(null, true);
             }
-            setLoading(false);
         }
 
         handleLocationChange();
@@ -50,7 +48,7 @@ export function RouterProvider({ routes } : { routes: Route[] }): () => any{
 
     const matchedRoute = matchRoute(currentPath, routes);
     if(!matchedRoute) throw new Error("there is no matched path");
-    if(loading)  return <div></div>;
+    if(!isFinish) return <div></div>;
 
     const Component = matchedRoute.component;
     return <Component/>;

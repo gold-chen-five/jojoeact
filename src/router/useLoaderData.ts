@@ -2,12 +2,14 @@ import { create } from "../hooks/useStore";
 
 export type LoaderData = {
     data: any,
-    setData: (data: any) => void
+    isFinish: boolean,
+    setData: (data: any, isFinish: boolean) => void
 }
 
 export const useLoader = create<LoaderData>((set) => ({
     data: null,
-    setData: (data) => set({data})
+    isFinish: false,
+    setData: (data, isFinish) => set({data, isFinish})
 }))
 
 export const useLoaderData = <T>() => useLoader<T>(state => state.data)

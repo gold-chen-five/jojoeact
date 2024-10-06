@@ -11,6 +11,7 @@ const routes: Route[] = [
         path: "/dev",
         component: Dev,
         loader: () => {
+            console.log('loader')
             return {user: 'test'};
         } 
     }
