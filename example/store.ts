@@ -1,4 +1,4 @@
-import { create } from "../index";
+import { create } from "../src/index";
 
 export type Test = {
     value: string;

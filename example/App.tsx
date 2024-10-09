@@ -1,5 +1,5 @@
 // src/App.tsx
-import { createElement, useState, useEffect, useNavigate } from '../index';
+import { createElement, useState, useEffect, useNavigate } from '../src/index.ts';
 import { Test } from './Test';
 
 export const App = () => {

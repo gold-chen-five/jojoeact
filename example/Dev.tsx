@@ -1,4 +1,4 @@
-import { createElement, useLoaderData } from "../index"
+import { createElement, useLoaderData } from "../src/index"
 import { useTest } from "./store"
 import { DevTwo } from "./DevTwo";
 import { Test } from "./store";

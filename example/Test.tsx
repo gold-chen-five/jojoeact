@@ -1,5 +1,5 @@
 // example/Test.tsx
-import { createElement } from "../index"
+import { createElement } from "../src/index"
 
 interface TestProps {
     count: number

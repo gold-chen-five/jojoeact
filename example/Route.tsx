@@ -1,4 +1,4 @@
-import { Route, RouterProvider, redirect } from "../index";
+import { Route, RouterProvider, redirect } from "../src/index";
 import { App } from "./App";
 import { Dev } from "./Dev";
 
