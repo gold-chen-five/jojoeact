@@ -13,6 +13,8 @@ export type Route = {
     children?: Route[];
 };
 
+let prevPath:string | undefined = undefined;
+
 export function RouterProvider({ routes } : { routes: Route[] }): () => any{
     const [currentPath, setCurrentPath] = useState<string>(window.location.pathname);
     const { setData, isFinish } = useLoader<LoaderData>();
@@ -26,7 +28,10 @@ export function RouterProvider({ routes } : { routes: Route[] }): () => any{
          * 4.if return value have redirect, navigate to the redirect route
          */
         async function handleLocationChange(){
-            setCurrentPath(window.location.pathname);
+            setCurrentPath(prevpath => {
+                prevPath = prevpath
+                return window.location.pathname;
+            });
             const matchedRoute = matchRoute(window.location.pathname, routes);
             if(matchedRoute && matchedRoute.loader) {
                 setData(null, false);
@@ -45,9 +50,14 @@ export function RouterProvider({ routes } : { routes: Route[] }): () => any{
         window.addEventListener('popstate', handleLocationChange);
         return () => window.removeEventListener('popstate', handleLocationChange);
     },[routes])
-
     const matchedRoute = matchRoute(currentPath, routes);
     if(!matchedRoute) throw new Error("there is no matched path");
+    if(!isFinish && prevPath && (prevPath !== currentPath)) {
+        const prevMatchedRoute = matchRoute(prevPath, routes);
+        if (!prevMatchedRoute) throw new Error("there is no prev matched path");
+        const Component =  prevMatchedRoute.component;
+        return <Component />
+    }
     if(!isFinish) return <div></div>;
 
     const Component = matchedRoute.component;
@@ -56,6 +66,7 @@ export function RouterProvider({ routes } : { routes: Route[] }): () => any{
 
 // recursive to find match route
 function matchRoute(pathname: string, routes: Route[]): Route | undefined {
+    if (!pathname) return undefined;
     for(const route of routes) {
         if(pathname === route.path) {
             return route;

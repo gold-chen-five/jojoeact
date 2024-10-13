@@ -38,7 +38,7 @@ export function createRoot(rootElement: HTMLElement | null): Root {
 
             console.log(vApp, newVApp)
             const patches = diff(vApp, newVApp);
-            // console.log(patches)
+            console.log(patches)
             rootNode = patch(rootNode, patches) as HTMLElement;
             vApp = newVApp;
         }

@@ -52,7 +52,7 @@ export function diff(oldVNode: VNode | VNode[], newVNode: VNode | VNode[]): Patc
   }
 
   // Text node comparison
-  if (oldVNode.type === "TEXT_ELEMENT" && oldVNode.props.nodeValue !== newVNode.props.nodeValue) {
+  if (oldVNode?.type === "TEXT_ELEMENT" && oldVNode.props.nodeValue !== newVNode.props.nodeValue) {
     return { type: "TEXT", newVNode };
   }
 
@@ -137,7 +137,7 @@ function diffChildren(oldChildren: (VNode | string | number)[], newChildren: (VN
     // Text or number comparison
     if (!oldChild && typeof oldChild === "boolean") {
       additionalPatches.push({ type: "ADD", newVNode: newChild as VNode });    
-    } else if (typeof oldChild === "string" || typeof oldChild === "number") {
+    } else if (typeof oldChild === "string" || typeof oldChild === "number" || oldChild === undefined) {
       if (oldChild !== newChild) {
         childPatches.push({
           type: "TEXT",
