@@ -135,7 +135,9 @@ function diffChildren(oldChildren: (VNode | string | number)[], newChildren: (VN
     const newChild = newChildren[i];
 
     // Text or number comparison
-    if (typeof oldChild === "string" || typeof oldChild === "number") {
+    if (!oldChild) {
+      additionalPatches.push({ type: "ADD", newVNode: newChild as VNode });    
+    } else if (typeof oldChild === "string" || typeof oldChild === "number") {
       if (oldChild !== newChild) {
         childPatches.push({
           type: "TEXT",

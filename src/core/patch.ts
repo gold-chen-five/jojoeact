@@ -33,7 +33,6 @@ function removeNode(dom: Node, patchObj: RemovePatch): Node {
 }
 
 function replaceNode(dom: Node, patchObj: ReplacePatch): Node {
-  console.log(dom, patchObj)
   const newDOM = render(patchObj.newVNode, document.createElement(`${patchObj.newVNode.type}`));
   dom.parentNode!.replaceChild(newDOM, dom);
   return newDOM;
