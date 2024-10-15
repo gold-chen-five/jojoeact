@@ -40,7 +40,6 @@ export function RouterProvider({ routes } : { routes: Route[] }): () => any{
                     navigate(returnData.redirect);
                     return;
                 }
-                console.log(returnData)
                 setData(returnData, true); 
             } else {
                 setData(null, true);
@@ -55,7 +54,6 @@ export function RouterProvider({ routes } : { routes: Route[] }): () => any{
     const matchedRoute = matchRoute(currentPath, routes);
     if(!matchedRoute) throw new Error("there is no matched path");
 
-    console.log(isFinish, prevPath, currentPath)
     if(!isFinish && prevPath && (prevPath !== currentPath)) {
         const prevMatchedRoute = matchRoute(prevPath, routes);
         if (!prevMatchedRoute) throw new Error("there is no prev matched path");

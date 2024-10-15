@@ -71,7 +71,6 @@ export function create<T extends object>(createState: StateCreator<T>):(<U>(sele
 
             return unsubscribe;
         },[selector]);
-
         return selectedState;
     }
 

@@ -1,4 +1,4 @@
-import { createElement, useLoaderData } from "../src/index"
+import { createElement, useLoaderData, useState } from "../src/index"
 import { useTest } from "./store"
 import { DevTwo } from "./DevTwo";
 import { Test } from "./store";
@@ -8,15 +8,18 @@ type Data = {
 }
 
 export function Dev(){
-    const { value, setValue } = useTest<Test>();
     const data = useLoaderData<Data>();
-
+    // const { value, setValue } = useTest<Test>();
+    const [value, setValue] = useState<string>('default')
+    console.log(value)
     return (
         <div>
             <h1>{data.user}</h1>
-            <button onclick={() => setValue("test")}>click</button>
+            <button onclick={() => setValue('test')}>test</button>
+            <div>{value}</div>
+            {/* <button onclick={() => setValue("test")}>click</button>
             <div>{ value }</div>
-            <DevTwo />
+            <DevTwo /> */}
         </div>
     )
 }
