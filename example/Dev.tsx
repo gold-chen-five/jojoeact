@@ -10,6 +10,7 @@ type Data = {
 export function Dev(){
     const { value, setValue } = useTest<Test>();
     const data = useLoaderData<Data>();
+
     return (
         <div>
             <h1>{data.user}</h1>

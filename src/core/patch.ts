@@ -1,12 +1,12 @@
 // src/core/patch.ts
 import { render } from './render';
-import { Patch, RemovePatch,ReplacePatch, TextPatch, PatchPatch, ArrayPatch } from './diff';
+import { Patch, ReplacePatch, TextPatch, PatchPatch, ArrayPatch } from './diff';
 
 export function patch(dom: Node, patchObj: Patch | null): Node {
   if (!patchObj) return dom;
   switch (patchObj.type) {
     case "REMOVE":
-      return removeNode(dom, patchObj);
+      return removeNode(dom);
     case "REPLACE":
       return replaceNode(dom, patchObj);
     case "TEXT":
@@ -25,11 +25,9 @@ export function patch(dom: Node, patchObj: Patch | null): Node {
   return dom;
 }
 
-function removeNode(dom: Node, patchObj: RemovePatch): Node {
-  //console.log(dom);
-  if(!dom) return dom;
-  const removedNode = dom.parentNode!.removeChild(dom);
-  return removedNode;
+function removeNode(dom: Node): Node {
+  if(!dom || !dom.parentNode) return dom;
+  return dom.parentNode.removeChild(dom);
 }
 
 function replaceNode(dom: Node, patchObj: ReplacePatch): Node {
@@ -60,11 +58,15 @@ function applyPropPatches(dom: Node, patchObj: PatchPatch): void {
 }
 
 function applyChildPatches(dom: Node, patchObj: PatchPatch): void {
+  let offset = 0;
   patchObj.childPatches.forEach((childPatch, i) => {
     if(childPatch?.type === "ARRAY") {
       patch(dom, childPatch);
+    } else if (childPatch?.type === "REMOVE") {
+      patch(dom.childNodes[i - offset], childPatch);
+      offset++;
     } else {
-      patch(dom.childNodes[i], childPatch);
+      patch(dom.childNodes[i - offset], childPatch);
     }
   });
 }
