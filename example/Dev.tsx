@@ -10,13 +10,13 @@ type Data = {
 export function Dev(){
     const data = useLoaderData<Data>();
     // const { value, setValue } = useTest<Test>();
-    const [value, setValue] = useState<string>('default')
+    const [value, setValue] = useState<boolean>(false)
     console.log(value)
     return (
         <div>
             <h1>{data.user}</h1>
-            <button onclick={() => setValue('test')}>test</button>
-            <div>{value}</div>
+            <button onclick={() => setValue(prev => !prev)}>test</button>
+            <div>{value ? "default" : "test"}</div>
             {/* <button onclick={() => setValue("test")}>click</button>
             <div>{ value }</div>
             <DevTwo /> */}

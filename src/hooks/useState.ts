@@ -11,7 +11,13 @@ let stateIndex: number = 0;
 function increaseStateIndex(): void {
   stateIndex++;
 }
-export function resetStateIndex():void {
+
+export function resetStates(): void {
+  states = [];
+  resetStateIndex();
+}
+
+export function resetStateIndex(): void {
   stateIndex = 0;
 }
 
@@ -21,6 +27,7 @@ export function resetStateIndex():void {
  * @returns return state ans setState
  */
 export function useState<T>(initialValue: T): [T, (value: T | ((prevState: T) => T)) => void] {
+  console.log(states);
   const currentIndex = stateIndex;
   increaseStateIndex();
   if (states[currentIndex] === undefined) {

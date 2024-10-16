@@ -1,5 +1,5 @@
 import { useEffect } from "../hooks/useEffect";
-import { useState } from "../hooks/useState";
+import { useState, resetStates  } from "../hooks/useState";
 import { navigate } from "./navigate";
 import { createElement } from "../core/vdom";
 import { useLoader, LoaderData } from "../router/useLoaderData";
@@ -28,6 +28,7 @@ export function RouterProvider({ routes } : { routes: Route[] }): () => any{
          * 4.if return value have redirect, navigate to the redirect route
          */
         async function handleLocationChange(){
+            resetStates();
             setCurrentPath(prevpath => {
                 prevPath = prevpath
                 return window.location.pathname;
@@ -35,6 +36,7 @@ export function RouterProvider({ routes } : { routes: Route[] }): () => any{
             const matchedRoute = matchRoute(window.location.pathname, routes);
             if(matchedRoute && matchedRoute.loader) {
                 setData(null, false);
+                
                 const returnData = await matchedRoute.loader();
                 if(returnData?.redirect) {
                     navigate(returnData.redirect);
