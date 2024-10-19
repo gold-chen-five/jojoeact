@@ -3,7 +3,7 @@ import { render } from './render';
 import { Patch, ReplacePatch, TextPatch, PatchPatch, ArrayPatch } from './diff';
 
 export function patch(dom: Node, patchObj: Patch | null): Node {
-  if (!patchObj) return dom;
+  if (!dom || !patchObj) return dom;
   switch (patchObj.type) {
     case "REMOVE":
       return removeNode(dom);

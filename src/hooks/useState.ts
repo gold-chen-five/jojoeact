@@ -27,7 +27,6 @@ export function resetStateIndex(): void {
  * @returns return state ans setState
  */
 export function useState<T>(initialValue: T): [T, (value: T | ((prevState: T) => T)) => void] {
-  console.log(states);
   const currentIndex = stateIndex;
   increaseStateIndex();
   if (states[currentIndex] === undefined) {
