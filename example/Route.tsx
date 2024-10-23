@@ -12,7 +12,7 @@ const routes: Route[] = [
         component: Dev,
         loader: () => {
             console.log('loader')
-            return {user: 'test'};
+            return {user: '111'};
         } 
     }
 ]

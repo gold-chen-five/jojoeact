@@ -72,7 +72,6 @@ function applyChildPatches(dom: Node, patchObj: PatchPatch): void {
 }
 
 function applyAdditionalPatches(dom: Node, patchObj: PatchPatch | ArrayPatch): void {
-  //console.log(dom);
   patchObj.additionalPatches.forEach(additionalPatch => {
     const newChildDOM = render(additionalPatch.newVNode, document.createElement(`${additionalPatch.newVNode.type}`));
     dom.appendChild(newChildDOM);
