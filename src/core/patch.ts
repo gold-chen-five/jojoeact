@@ -3,7 +3,7 @@ import { render } from './render';
 import { Patch, ReplacePatch, TextPatch, PatchPatch, ArrayPatch } from './diff';
 
 export function patch(dom: Node, patchObj: Patch | null): Node {
-  if (!dom || !patchObj) return dom;
+  if ( !patchObj) return dom;
   switch (patchObj.type) {
     case "REMOVE":
       return removeNode(dom);
@@ -37,7 +37,7 @@ function replaceNode(dom: Node, patchObj: ReplacePatch): Node {
 }
 
 function updateTextNode(dom: Node, patchObj: TextPatch): Node {
-  (dom as Text).nodeValue = patchObj.newVNode.props.nodeValue;
+  (dom as Text).nodeValue = patchObj.newVNode.props.nodeValue ?? "";
   return dom;
 }
 
