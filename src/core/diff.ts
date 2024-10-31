@@ -134,10 +134,13 @@ function diffChildren(oldChildren: (VNode | string | number)[], newChildren: (VN
   oldChildren.forEach((oldChild, i) => {
     const newChild = newChildren[i];
 
-    // Text or number comparison
-    if (!oldChild) {
-      additionalPatches.push({ type: "ADD", newVNode: newChild as VNode });    
-    } else if (typeof oldChild === "string" || typeof oldChild === "number") {
+    if(!oldChild && typeof newChild === "object") {
+      additionalPatches.push({ type: "ADD", newVNode: newChild as VNode }); 
+    } else if (
+      typeof oldChild === "string"  || 
+      typeof oldChild === "number"  || 
+      typeof oldChild === "boolean" 
+    ) {
       if (oldChild !== newChild) {
         childPatches.push({
           type: "TEXT",
