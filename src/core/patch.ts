@@ -48,13 +48,52 @@ function applyArrayChildPatches(dom: Node, patchObj: ArrayPatch): void {
   });
 }
 
+// use weak map to store event listener
+// check if event listener have be create, remove it when the new event listner function is different
+const eventListeners = new WeakMap<Element, Map<string, EventListener>>();
+
 function applyPropPatches(dom: Node, patchObj: PatchPatch): void {
+  const element = dom as Element;
+
   for (const [key, value] of Object.entries(patchObj.propPatches)) {
-    if (value === null) {
-      (dom as Element).removeAttribute(key);
+    // (dom as Element).setAttribute(key, value);
+    if (key === 'children') continue;
+
+    if (key.startsWith('on')) {
+      const eventType = key.slice(2).toLowerCase();
+      const newListener = typeof value === 'function' ? value : null;
+      updateEventListener(element, eventType, newListener);
     } else {
-      (dom as Element).setAttribute(key, value);
+      updateAttribute(element, key, value);
     }
+  }
+}
+
+function updateEventListener(element: Element, eventType: string, newListener: EventListener | null) {
+  const listenerMap = eventListeners.get(element) || new Map<string, EventListener>();
+
+  const existingListener = listenerMap.get(eventType);
+  if (existingListener) {
+    element.removeEventListener(eventType, existingListener);
+  }
+
+  if (newListener) {
+    element.addEventListener(eventType, newListener);
+    listenerMap.set(eventType, newListener);
+    eventListeners.set(element, listenerMap);
+  } else {
+    listenerMap.delete(eventType);
+    if (listenerMap.size === 0) {
+      eventListeners.delete(element);
+    }
+  }
+}
+
+function updateAttribute(element: Element, key: string, value: any) {
+  if (value === null) {
+    element.removeAttribute(key);
+  } else {
+    element.setAttribute(key, value);
   }
 }
 
