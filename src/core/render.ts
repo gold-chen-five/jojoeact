@@ -1,5 +1,6 @@
 // src/core/render.ts
 import { VNode } from './vdom';
+import { updateEventListener, updateAttribute } from './patch';
 
 export function render(vnode: VNode | string | number | VNode[], container: HTMLElement): Node {
   if (vnode === null || vnode === undefined) {
@@ -37,9 +38,12 @@ function setElementProps(domElement: HTMLElement, props: Record<string, any>): v
     if (key !== 'children') {
       if (key.startsWith('on')) {
         const eventType = key.slice(2).toLowerCase();
-        domElement.addEventListener(eventType, value);
+
+        const newListener = typeof value === 'function' ? value : null;
+
+        updateEventListener(domElement, eventType, newListener);
       } else {
-        domElement.setAttribute(key, value);
+        updateAttribute(domElement, key, value);
       }
     }
   });

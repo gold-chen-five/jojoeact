@@ -61,6 +61,7 @@ function applyPropPatches(dom: Node, patchObj: PatchPatch): void {
 
     if (key.startsWith('on')) {
       const eventType = key.slice(2).toLowerCase();
+      
       const newListener = typeof value === 'function' ? value : null;
       updateEventListener(element, eventType, newListener);
     } else {
@@ -69,11 +70,13 @@ function applyPropPatches(dom: Node, patchObj: PatchPatch): void {
   }
 }
 
-function updateEventListener(element: Element, eventType: string, newListener: EventListener | null) {
+export function updateEventListener(element: Element, eventType: string, newListener: EventListener | null) {
   const listenerMap = eventListeners.get(element) || new Map<string, EventListener>();
 
   const existingListener = listenerMap.get(eventType);
+
   if (existingListener) {
+    console.log(eventType, existingListener)
     element.removeEventListener(eventType, existingListener);
   }
 
@@ -89,7 +92,7 @@ function updateEventListener(element: Element, eventType: string, newListener: E
   }
 }
 
-function updateAttribute(element: Element, key: string, value: any) {
+export function updateAttribute(element: Element, key: string, value: any) {
   if (value === null) {
     element.removeAttribute(key);
   } else {
