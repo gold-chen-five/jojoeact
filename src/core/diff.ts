@@ -133,8 +133,7 @@ function diffChildren(oldChildren: (VNode | string | number)[], newChildren: (VN
 
   oldChildren.forEach((oldChild, i) => {
     const newChild = newChildren[i];
-
-    if(!oldChild) {
+    if(oldChild === undefined || oldChild === null) {
       additionalPatches.push({ type: "ADD", newVNode: newChild as VNode }); 
     } else if (
       typeof oldChild === "string"  || 
